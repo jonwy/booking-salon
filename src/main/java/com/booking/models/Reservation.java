@@ -1,6 +1,9 @@
 package com.booking.models;
 
 import java.util.List;
+
+import com.booking.util.IDGenerator;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +16,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Reservation {
+    private static int index = 1;
+
     private String reservationId;
     private Customer customer;
     private Employee employee;
@@ -21,9 +26,9 @@ public class Reservation {
     private String workstage;
     //   workStage (In Process, Finish, Canceled)
 
-    public Reservation(String reservationId, Customer customer, Employee employee, List<Service> services,
+    public Reservation(Customer customer, Employee employee, List<Service> services,
             String workstage) {
-        this.reservationId = reservationId;
+        this.reservationId = IDGenerator.generateID("Rsv", index++);
         this.customer = customer;
         this.employee = employee;
         this.services = services;
