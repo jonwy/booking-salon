@@ -7,11 +7,9 @@ import com.booking.util.IDGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
@@ -26,6 +24,10 @@ public class Reservation {
     private String workstage;
     //   workStage (In Process, Finish, Canceled)
 
+    public Reservation() {
+        reservationId = generateId();
+    }
+
     public Reservation(Customer customer, Employee employee, List<Service> services,
             String workstage) {
         this.reservationId = IDGenerator.generateID("Rsv", index++);
@@ -38,5 +40,9 @@ public class Reservation {
 
     private double calculateReservationPrice(){
         return 0;
+    }
+
+    public static String generateId() {
+        return IDGenerator.generateID("Rsv", index++);
     }
 }

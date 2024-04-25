@@ -7,6 +7,7 @@ import com.booking.models.Employee;
 import com.booking.models.Person;
 import com.booking.models.Reservation;
 import com.booking.models.Service;
+import com.booking.util.Utils;
 
 public class PrintService {
     public static void printMenu(String title, String[] menuArr){
@@ -48,9 +49,9 @@ public class PrintService {
                 "No.", "ID", "Nama Customer", "Service", "Biaya Service", "Pegawai", "Workstage");
         System.out.println("+========================================================================================+");
         for (Reservation reservation : reservationList) {
-            if (reservation.getWorkstage().equalsIgnoreCase("Waiting") || reservation.getWorkstage().equalsIgnoreCase("In process")) {
+            if (reservation.getWorkstage().equalsIgnoreCase("In Process") || reservation.getWorkstage().equalsIgnoreCase("In process")) {
                 System.out.printf("| %-4s | %-4s | %-11s | %-15s | %-15s | %-15s | %-10s |\n",
-                num, reservation.getReservationId(), reservation.getCustomer().getName(), printServices(reservation.getServices()), reservation.getReservationPrice(), reservation.getEmployee().getName(), reservation.getWorkstage());
+                num, reservation.getReservationId(), reservation.getCustomer().getName(), printServices(reservation.getServices()), Utils.IDRFormatter(reservation.getReservationPrice()), reservation.getEmployee().getName(), reservation.getWorkstage());
                 num++;
             }
         }
@@ -67,7 +68,7 @@ public class PrintService {
                 Customer customer = (Customer)person;
                 System.out.printf("| %-4s | %-10s | %-20s | %-20s | %-15s | %-15s |\n", 
                 num++, customer.getId(), customer.getName(), customer.getAddress(), 
-                customer.getMember().getMembershipName(), customer.getWallet());
+                customer.getMember().getMembershipName(), Utils.IDRFormatter(customer.getWallet()));
             }
         }
     }
@@ -87,7 +88,23 @@ public class PrintService {
         }
     }
 
-    public void showHistoryReservation(){
+    public static void showHistoryReservation(List<Reservation> reservationList){
+        int num = 1;
+        System.out.println("History Reservasi dan Keuntungan");
+        System.out.printf("| %-4s | %-4s | %-11s | %-15s | %-15s | %-15s | %-10s |\n",
+                "No.", "ID", "Nama Customer", "Service", "Biaya Service", "Pegawai", "Workstage");
+        System.out.println("+========================================================================================+");
+        for (Reservation reservation : reservationList) {
+            System.out.printf("| %-4s | %-4s | %-11s | %-15s | %-15s | %-15s | %-10s |\n",
+                num++, reservation.getReservationId(), reservation.getCustomer().getName(), printServices(reservation.getServices()), Utils.IDRFormatter(reservation.getReservationPrice()), reservation.getEmployee().getName(), reservation.getWorkstage());
+        }
         
+        double totalKeuntungan = 
+            reservationList.stream()
+                .filter(reservation -> reservation.getWorkstage().equalsIgnoreCase("finish"))
+                .mapToDouble(reservation -> reservation.getReservationPrice())
+                .sum();
+
+        System.out.printf("| %-30s |  %-15s |\n", "Total Keuntungan: ", Utils.IDRFormatter(totalKeuntungan));
     }
 }

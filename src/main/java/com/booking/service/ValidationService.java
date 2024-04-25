@@ -9,40 +9,28 @@ import java.util.List;
 
 public class ValidationService {
     // Buatlah function sesuai dengan kebutuhan
-    public static void validateInput(){
+    public static void validateInput(String type, boolean isNull){
 
     }
 
-    public static Customer validateCustomerId(String id, List<Person> persons){
-        for (Person person: persons) {
-            if (person instanceof Customer) {
-                Customer customer = (Customer) person;
-                if (customer.getId().equalsIgnoreCase(id)) {
-                    return customer;
-                }
-            }
+    public static int isInputNumber(String input) {
+        if (input.matches("[0-9]+")) {
+            return Integer.parseInt(input);
         }
-        return null;
+        System.out.println("Input harus berupa angka");
+        return -1;
     }
 
-    public static Employee validateEmployeeId(String id, List<Person> persons) {
-        for (Person person: persons) {
-            if (person instanceof Employee) {
-                Employee employee = (Employee) person;
-                if (employee.getId().equalsIgnoreCase(id)) {
-                    return employee;
-                }
-            }
+    public static boolean workstageStatusChangeValidate(int input) {
+        if (input >= 1 && input <= 2) {
+            return true;
         }
-        return null;
+        System.out.println("Input hanya boleh 1 / 2");
+        return false;
     }
 
-    public static Service validateServiceId(String id, List<Service> serviceList){
-        for (Service service: serviceList) {
-            if (service.getServiceId().equalsIgnoreCase(id)) {
-                return service;
-            }
-        }
-        return null;
+    public static void printErrorDataIsNull(String type) {
+        System.out.println(type + " tidak ditemukan");
     }
+
 }
